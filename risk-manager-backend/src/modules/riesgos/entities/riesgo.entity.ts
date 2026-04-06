@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from "typeorm";
+import { Accion } from "src/modules/acciones/entities/accione.entity";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, JoinColumn } from "typeorm";
 
 @Entity('riesgos')
 export class Riesgo {
@@ -18,15 +19,19 @@ export class Riesgo {
     @Column({ type: 'int', default: 1 })
     probabilidad: number;
 
-    @Column({type: 'int', default: 1})
+    @Column({ type: 'int', default: 1 })
     impacto: number;
 
-    @Column({default: 'Abierto'})
+    @Column({ default: 'Abierto' })
     estado: string;
 
     @Column()
     responsable: string;
 
     @CreateDateColumn()
-    fechaCreacion: Date;
+    fechaDeteccion: Date;
+
+    @OneToMany(() => Accion, (accion) => accion.riesgo)
+    acciones: Accion[];
+    
 }

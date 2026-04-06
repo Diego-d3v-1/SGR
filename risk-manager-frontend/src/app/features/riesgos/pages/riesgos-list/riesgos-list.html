@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestión de Riesgos</h2>
+    <button class="btn btn-primary">+ Nuevo Riesgo</button>
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error && !loading" class="alert alert-danger">
+    Error al cargar los riesgos. Verifica que el backend esté corriendo en http://localhost:3000
+  </div>
+
+  <!-- Contenido cuando NO está cargando y NO hay error -->
+  <div *ngIf="!loading && !error">
+    <!-- Mensaje si no hay riesgos -->
+    <div *ngIf="riesgos.length === 0" class="alert alert-info">
+      No hay riesgos registrados. Crea uno nuevo para comenzar.
+    </div>
+
+    <!-- Tabla de riesgos -->
+    <table *ngIf="riesgos.length > 0" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Categoría</th>
+          <th>Probabilidad</th>
+          <th>Impacto</th>
+          <th>Estado</th>
+          <th>Responsable</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let riesgo of riesgos">
+          <td>{{ riesgo.id }}</td>
+          <td>{{ riesgo.titulo }}</td>
+          <td>
+            <span class="badge bg-secondary">{{ riesgo.categoria }}</span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': riesgo.probabilidad <= 2,
+              'bg-warning': riesgo.probabilidad === 3,
+              'bg-danger': riesgo.probabilidad >= 4
+            }">
+              {{ riesgo.probabilidad }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="{
+              'bg-success': riesgo.impacto <= 2,
+              'bg-warning': riesgo.impacto === 3,
+              'bg-danger': riesgo.impacto >= 4
+            }">
+              {{ riesgo.impacto }}
+            </span>
+          </td>
+          <td>{{ riesgo.estado }}</td>
+          <td>{{ riesgo.responsable }}</td>
+          <td>
+            <button class="btn btn-sm btn-info me-1">Ver</button>
+            <button class="btn btn-sm btn-warning me-1">Editar</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteRiesgo(riesgo.id!)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

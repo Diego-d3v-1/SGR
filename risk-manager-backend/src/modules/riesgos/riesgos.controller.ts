@@ -5,7 +5,7 @@ import { UpdateRiesgoDto } from './dto/update-riesgo.dto';
 
 @Controller('riesgos')
 export class RiesgosController {
-  constructor(private readonly riesgosService: RiesgosService) {}
+  constructor(private readonly riesgosService: RiesgosService) { }
 
   @Post()
   create(@Body() createRiesgoDto: CreateRiesgoDto) {
@@ -22,6 +22,11 @@ export class RiesgosController {
     return this.riesgosService.findOne(+id);
   }
 
+  @Get('categoria/:categoria')
+  findByCategoria(@Param('categoria') categoria: string) {
+    return this.riesgosService.findbycategoria(categoria)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRiesgoDto: UpdateRiesgoDto) {
     return this.riesgosService.update(+id, updateRiesgoDto);
@@ -31,4 +36,6 @@ export class RiesgosController {
   remove(@Param('id') id: string) {
     return this.riesgosService.remove(+id);
   }
+
+
 }

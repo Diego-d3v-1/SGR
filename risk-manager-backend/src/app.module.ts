@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RiesgosModule } from './modules/riesgos/riesgos.module';
+import { CategoriasModule } from './modules/categorias/categorias.module';
+import { AccionesModule } from './modules/acciones/acciones.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { RiesgosModule } from './modules/riesgos/riesgos.module';
       synchronize: true,
     }),
     RiesgosModule,
+    CategoriasModule,
+    AccionesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

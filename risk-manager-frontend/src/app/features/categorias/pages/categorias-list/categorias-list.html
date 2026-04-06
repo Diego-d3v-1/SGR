@@ -1,0 +1,24 @@
+<h2>Listar Categoria</h2>
+
+<div *ngIf="loading">
+    Cargando...
+
+</div>
+
+<div *ngIf="error">
+    Error al cargar categorias
+</div>
+
+<div *ngIf="!loading && !error">
+    <p>Total: {{ categorias.length }}</p>
+
+    <ul>
+        <li *ngFor="let cat of categorias">
+            {{cat.nombre}} - {{cat.descripcion}}
+            <button (click)="deleteCategoria(cat.id!)">Eliminar</button>
+        </li>
+
+    </ul>
+
+
+</div>

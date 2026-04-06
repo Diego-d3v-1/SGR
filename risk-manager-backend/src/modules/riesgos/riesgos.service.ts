@@ -1,26 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRiesgoDto } from './dto/create-riesgo.dto';
 import { UpdateRiesgoDto } from './dto/update-riesgo.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Riesgo } from './entities/riesgo.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class RiesgosService {
-  create(createRiesgoDto: CreateRiesgoDto) {
-    return 'This action adds a new riesgo';
+
+  constructor(
+    @InjectRepository(Riesgo)
+    private riesgosRepository: Repository<Riesgo>
+  ) { }
+
+  async create(createRiesgoDto: CreateRiesgoDto): Promise<Riesgo> {
+
+    const riesgo = this.riesgosRepository.create(createRiesgoDto);
+    return await this.riesgosRepository.save(riesgo)
+
   }
 
-  findAll() {
-    return `This action returns all riesgos`;
+  async findOne(id: number): Promise<Riesgo> {
+
+    const riesgo = await this.riesgosRepository.findOne({ where: { id } })
+
+    if (!riesgo) {
+      throw new NotFoundException(`Riesgo con ID ${id} no encontrado`)
+    }
+
+    return riesgo
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} riesgo`;
+  async findAll(): Promise<Riesgo[]> {
+
+    return await this.riesgosRepository.find();
+
   }
 
-  update(id: number, updateRiesgoDto: UpdateRiesgoDto) {
-    return `This action updates a #${id} riesgo`;
+
+
+  async update(id: number, updateRiesgoDto: UpdateRiesgoDto): Promise<Riesgo> {
+
+    const riesgo = await this.findOne(id)
+
+    Object.assign(riesgo, updateRiesgoDto)
+
+    return await this.riesgosRepository.save(riesgo)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} riesgo`;
+  async remove(id: number): Promise<void> {
+
+    const riesgo = await this.findOne(id)
+
+    await this.riesgosRepository.remove(riesgo);
   }
+
+  async findbycategoria(categoria: string): Promise<Riesgo[]>{
+
+    return await this.riesgosRepository.find({ where: { categoria } });
+
+  }
+
 }
